@@ -1,0 +1,24 @@
+<html>
+
+<head>
+    <style>
+        .medium {
+            color: orange;
+        }
+
+        .bad {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>{{title}}</h1>
+    {% for sentence in sentences %}
+    <p class="{{sentence.speaker}}">
+        {% for word in sentence.words %}<span class='{{word.confidence}}'>{{word.word}} </span>{% endfor %}
+    </p>
+    {% endfor %}
+</body>
+
+</html>

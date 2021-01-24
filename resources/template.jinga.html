@@ -1,0 +1,49 @@
+<html>
+
+<head>
+    <style>
+        .medium {
+            color: orange;
+        }
+
+        .bad {
+            color: red;
+        }
+
+        .spk_0 {
+            background-color: #ddd;
+        }
+
+        .spk_1 {
+            background-color: #eee;
+        }
+
+        #main {
+            width: 800px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main">
+        <div id="content">
+            <h1>{{title}}</h1>
+            {% for sentence in sentences %}
+            <div class="{{sentence.speaker}}">
+                <p>
+                    {% for symbol in sentence.symbols %}<span class='{{symbol.confidence}}'>{{symbol.entry}} </span>{%
+                    endfor %}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+        <div id="metadata">
+            <p>Speackers: {{metadata.speakers}}</p>
+            <p>Sentences: {{sentences|length}}</p>
+            <p>Items: {{metadata.items}}</p>
+        </div>
+    </div>
+</body>
+
+</html>

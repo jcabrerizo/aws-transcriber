@@ -25,7 +25,8 @@ def main():
     htmlFormatter = HtmlFormatter(data)
     # TODO: pass format options
     html = htmlFormatter.format()
-    print(html)
+    # TODO: add parameter for printing it
+#    print(html)
     # TODO: create module for file management
     outputFile = f"./target/{data['jobName']}.html"
     with open(outputFile, "w") as fh:

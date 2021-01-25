@@ -32,8 +32,7 @@
             {% for sentence in sentences %}
             <div class="{{sentence.speaker}}">
                 <p>
-                    {% for symbol in sentence.symbols %}<span class='{{symbol.confidence}}'>{{symbol.entry}} </span>{%
-                    endfor %}
+                    {% for symbol in sentence.symbols %}<span class='{{symbol.confidence}}'>{% if loop.counter != 1 and symbol.type != 'punctuation' %} {% endif %}{{symbol.entry}}</span>{% endfor %}
                 </p>
             </div>
             {% endfor %}

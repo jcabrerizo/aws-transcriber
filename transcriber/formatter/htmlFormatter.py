@@ -17,7 +17,7 @@ class HtmlFormatter:
         self._buildModel()
         html = jinja2.Environment(
             loader=jinja2.FileSystemLoader('./../resources')
-        ).get_template('template.jinga.html').render(
+        ).get_template('template.jinja.html').render(
             title=self.model['title'],
             sentences=self.model['data']['sentences'],
             metadata=self._buildMetadata())
@@ -33,14 +33,14 @@ class HtmlFormatter:
         self.model['data']['sentences'] = []
         for segment in self.data['results']['speaker_labels']['segments']:
             itemsInSegment = len(segment['items'])
-            symbols, segmentsRead = self._getSymbolsInSegment(
+            symbols, itemsRead = self._getSymbolsInSegment(
                 segmentCounter, itemsInSegment)
             newSentence = {
                 'speaker': segment['speaker_label'],
                 'symbols': symbols
             }
             self.model['data']['sentences'].append(newSentence)
-            segmentCounter += segmentsRead
+            segmentCounter += itemsRead
 
         self.model['data']['items'] = segmentCounter
 #        logging.debug(f'Model: {self.model}')
@@ -53,27 +53,24 @@ class HtmlFormatter:
 
     def _getSymbolsInSegment(self, itemCounter, itemsInSegment):
         symbols = []
-        segmentsRead = 0
+        itemsRead = 0
         itemsCounter = 0
         itemsInSegmenRaw = self.data['results']['items'][itemCounter:]
         logging.debug(
             f"getting {itemsInSegment} starting in {itemCounter} contaings {len(itemsInSegmenRaw)}")
         while itemsCounter < itemsInSegment:
-            if itemCounter>=700:
-                print(itemsInSegmenRaw[segmentsRead])
-            item = itemsInSegmenRaw[segmentsRead]
+            item = itemsInSegmenRaw[itemsRead]
             symbols.append(self._buildEntry(item))
             if item['type'] != "punctuation":
                 itemsCounter += 1
-            segmentsRead += 1
-            # print(f"segmentCounter: {segmentCounter}, type: {item['type']}")
-        
+            itemsRead += 1
+
         # Adding next to the segment if it's punctuation
-        # if len(itemsInSegmenRaw) > segmentsRead+1 and itemsInSegmenRaw[segmentsRead + 1]['type'] == "punctuation":
-        #     symbols.append(self._buildEntry(itemsInSegmenRaw[segmentsRead + 1]))
-        #     logging.debug("Punctuation inserted as last item in segment")
-        #     segmentsRead += 1
-        return symbols, segmentsRead
+        if len(itemsInSegmenRaw) > itemsRead and itemsInSegmenRaw[itemsRead]['type'] == "punctuation":
+            symbols.append(self._buildEntry(itemsInSegmenRaw[itemsRead]))
+            logging.debug("Punctuation inserted as last item in segment")
+            itemsRead += 1
+        return symbols, itemsRead
 
     def _mapConficenceClass(self, confidence):
         if float(confidence) < 0.5:
@@ -87,5 +84,5 @@ class HtmlFormatter:
         return {
                 'entry': item['alternatives'][0]['content'],
                 'confidence': self._mapConficenceClass(item['alternatives'][0]['confidence']),
-                'type':item['type']
+                'type' : item['type']
                 }

@@ -1,8 +1,8 @@
 import logging
 import webbrowser
 import os
-from parser.parser import TranscriptParser
-from formatter.htmlFormatter import HtmlFormatter
+from transcriber.parser.parser import TranscriptParser
+from transcriber.formatter.htmlFormatter import HtmlFormatter
 
 # TODO: replace with CLI param
 logging.basicConfig(level=logging.DEBUG)

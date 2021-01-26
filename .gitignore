@@ -129,4 +129,7 @@ dmypy.json
 .pyre/
 .idea/
 
+# VS code files
+.vscode/
+
 input/*.json

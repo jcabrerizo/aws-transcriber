@@ -16,7 +16,7 @@ class HtmlFormatter:
     def format(self):
         self._buildModel()
         html = jinja2.Environment(
-            loader=jinja2.FileSystemLoader('./../resources')
+            loader=jinja2.FileSystemLoader('./resources')
         ).get_template('template.jinja.html').render(
             title=self.model['title'],
             sentences=self.model['data']['sentences'],
@@ -25,7 +25,7 @@ class HtmlFormatter:
         return html
 
     def _buildModel(self):
-        self.model['title'] = f"Transcription {self.data['jobName']}"
+        self.model['title'] = f"{self.data['jobName']}"
         self.model['data'] = {}
         self.model['data']['speakers'] = self.data['results']['speaker_labels']['speakers']
 

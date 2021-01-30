@@ -11,11 +11,44 @@
         }
 
         .spk_0 {
-            background-color: #ddd;
+            background-color: #f0f0f0;
+            position: relative;
+            padding: 0px 5px 2px 5px;
+            margin: 0px;
+            border-bottom: solid 1px #f0f0f0;
+
+        }
+
+        .spk_0:after {
+            content: "Persona 1";
+            position: absolute;
+            text-align: right;
+            transform: translate(-102%, -94%);
+            height: 100%;
+            padding-right: 10px;
+            width: min-content*1.1;
+            color: #a0a0a0;
+            /*background-color: #909090;*/
         }
 
         .spk_1 {
-            background-color: #eee;
+            background-color: #d0d0d0;
+            position: relative;
+            padding: 0px 5px 2px 5px;
+            margin: 0px;
+            border-bottom: solid 1px #f0f0f0;
+        }
+
+        .spk_1:after {
+            content: "Persona 2";
+            position: absolute;
+            text-align: right;
+            transform: translate(-102%, -94%);
+            height: 100%;
+            padding-right: 10px;
+            width: min-content*1.1;
+            color: #606060;
+            /*background-color: #c0c0c0;*/
         }
 
         #main {
@@ -32,7 +65,8 @@
             {% for sentence in sentences %}
             <div class="{{sentence.speaker}}">
                 <p>
-                    {% for symbol in sentence.symbols %}<span class='{{symbol.confidence}}'>{% if loop.counter != 1 and symbol.type != 'punctuation' %} {% endif %}{{symbol.entry}}</span>{% endfor %}
+                    {% for symbol in sentence.symbols %}<span class='{{symbol.confidence}}'>{% if loop.counter != 1 and
+                        symbol.type != 'punctuation' %} {% endif %}{{symbol.entry}}</span>{% endfor %}
                 </p>
             </div>
             {% endfor %}

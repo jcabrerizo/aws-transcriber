@@ -12,6 +12,7 @@ class TranscriptParser:
         return self.jsonPath
 
     def parse(self):
-        with open(self.jsonPath) as json_file:
+        # TODO: definir parámetros para encoding
+        with open(self.jsonPath,encoding="utf-8") as json_file:
             data = json.load(json_file)
         return data

@@ -18,7 +18,7 @@ def screenMessage(msg):
 def main():
     screenMessage("AWS transcrip")
 
-    inputDirectory = r'../input'
+    inputDirectory = r'./input'
     for inputFile in os.listdir(inputDirectory):
         if inputFile.endswith(".json"):
             parser = TranscriptParser(f'{inputDirectory}/{inputFile}')

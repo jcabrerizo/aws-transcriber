@@ -2,9 +2,11 @@ import logging
 import webbrowser
 import os
 from pathlib import Path
+
 from parser import TranscriptParser
 from formatter.htmlFormatter import HtmlFormatter
 from cli_parser import CliParser
+from filemanager import FileManager
 
 args = CliParser().create_parser().parse_args()
 
@@ -14,30 +16,30 @@ logging.debug(f"Efective execution arguments: {args}")
 printScreenMessages = args.silent
 openInBrowser = args.browser
 
+
 def screenMessage(msg):
     if printScreenMessages:
         print(msg)
 
+
 def main():
     screenMessage("AWS transcribe viewer")
 
-    input = args.input
-    # TODO: allow only one file as input or a dir for a batch
-    # TODO: move file logic to a file management module
-    for inputFile in os.listdir(input):
+    fm = FileManager(args.input, args.output)
+    for inputFile in fm.getFilesToProcess():
         if inputFile.endswith(".json"):
-            parser = TranscriptParser(f'{input}/{inputFile}')
-            screenMessage(f"Path in parser: {parser.getJsonPath()}")
+            parser = TranscriptParser(inputFile)
+            screenMessage(f"File to be parsed: {parser.getJsonPath()}")
             model = parser.parse()
             jobName = model['metadata']['jobName']
             screenMessage(f"AWS account: {model['metadata']['accountId']}")
             screenMessage(f"JobName: {jobName}")
-            htmlFormatter = HtmlFormatter(model)
             # TODO: pass format options
+            htmlFormatter = HtmlFormatter(model)
             output = htmlFormatter.format()
             if args.print_output:
                 print(htmoutputl)
-            # TODO: create module for file management            
+            # TODO: create module using the file management
             Path(args.output).mkdir(parents=True, exist_ok=True)
             outputFile = f"./{args.output}/{jobName}.html"
             screenMessage(f'Output file: {outputFile}')
@@ -47,7 +49,6 @@ def main():
                 webbrowser.open('file://' + os.path.realpath(outputFile))
         else:
             continue
-
 
 
 if __name__ == "__main__":

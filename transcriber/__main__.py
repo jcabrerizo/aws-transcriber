@@ -12,7 +12,7 @@ logging.basicConfig(level=logging._nameToLevel[args.debug_level])
 logging.debug(f"Efective execution arguments: {args}")
 
 printScreenMessages = args.silent
-openInBrowser = False
+openInBrowser = args.browser
 
 def screenMessage(msg):
     if printScreenMessages:
@@ -28,17 +28,18 @@ def main():
         if inputFile.endswith(".json"):
             parser = TranscriptParser(f'{input}/{inputFile}')
             screenMessage(f"Path in parser: {parser.getJsonPath()}")
-            data = parser.parse()
-            screenMessage(f"AWS account: {data['accountId']}")
-            screenMessage(f"JobName: {data['jobName']}")
-            htmlFormatter = HtmlFormatter(data)
+            model = parser.parse()
+            jobName = model['metadata']['jobName']
+            screenMessage(f"AWS account: {model['metadata']['accountId']}")
+            screenMessage(f"JobName: {jobName}")
+            htmlFormatter = HtmlFormatter(model)
             # TODO: pass format options
             output = htmlFormatter.format()
             if args.print_output:
                 print(htmoutputl)
             # TODO: create module for file management            
             Path(args.output).mkdir(parents=True, exist_ok=True)
-            outputFile = f"./{args.output}/{data['jobName']}.html"
+            outputFile = f"./{args.output}/{jobName}.html"
             screenMessage(f'Output file: {outputFile}')
             with open(outputFile, "w") as fh:
                 fh.write(output)

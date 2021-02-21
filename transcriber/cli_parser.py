@@ -47,6 +47,10 @@ class CliParser:
                             help="Do no save the converted text to a file",
                             action="store_true"
                             )
+        parser.add_argument("-b","--browser",
+                            help="Open a browser window with the output file",
+                            action="store_true"
+                            )
         parser.add_argument("--print-output",
                             help="Print output file on the console",
                             action="store_true"

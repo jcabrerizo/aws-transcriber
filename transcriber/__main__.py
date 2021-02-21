@@ -1,8 +1,8 @@
 import logging
 import webbrowser
 import os
-from transcriber.parser.parser import TranscriptParser
-from transcriber.formatter.htmlFormatter import HtmlFormatter
+from parser.parser import TranscriptParser
+from formatter.htmlFormatter import HtmlFormatter
 
 # TODO: replace with CLI param
 logging.basicConfig(level=logging.DEBUG)
@@ -32,7 +32,8 @@ def main():
             # TODO: add parameter for printing it
             #    print(html)
             # TODO: create module for file management
-            outputFile = f"./target/{data['jobName']}.html"
+            # TODO: create dir if not exist
+            outputFile = f"./output/{data['jobName']}.html"
             with open(outputFile, "w") as fh:
                 fh.write(html)
             if openInBrowser:

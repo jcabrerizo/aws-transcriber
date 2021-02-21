@@ -56,8 +56,8 @@ class HtmlFormatter:
         itemsRead = 0
         itemsCounter = 0
         itemsInSegmenRaw = self.data['results']['items'][itemCounter:]
-        logging.debug(
-            f"getting {itemsInSegment} starting in {itemCounter} contaings {len(itemsInSegmenRaw)}")
+#        logging.debug(
+#             f"getting {itemsInSegment} starting in {itemCounter} contaings {len(itemsInSegmenRaw)}")
         while itemsCounter < itemsInSegment:
             item = itemsInSegmenRaw[itemsRead]
             symbols.append(self._buildEntry(item))
@@ -68,7 +68,7 @@ class HtmlFormatter:
         # Adding next to the segment if it's punctuation
         if len(itemsInSegmenRaw) > itemsRead and itemsInSegmenRaw[itemsRead]['type'] == "punctuation":
             symbols.append(self._buildEntry(itemsInSegmenRaw[itemsRead]))
-            logging.debug("Punctuation inserted as last item in segment")
+#            logging.debug("Punctuation inserted as last item in segment")
             itemsRead += 1
         return symbols, itemsRead
 

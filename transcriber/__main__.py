@@ -1,41 +1,47 @@
 import logging
 import webbrowser
 import os
+from pathlib import Path
 from parser.parser import TranscriptParser
 from formatter.htmlFormatter import HtmlFormatter
+from cli_parser import CliParser
 
-# TODO: replace with CLI param
-logging.basicConfig(level=logging.DEBUG)
-printScreenMessages = True
-path = "../resources/asrOutput.json"
+args = CliParser().create_parser().parse_args()
+
+logging.basicConfig(level=logging._nameToLevel[args.debug_level])
+logging.debug(f"Efective execution arguments: {args}")
+
+printScreenMessages = args.silent
 openInBrowser = False
 
 def screenMessage(msg):
     if printScreenMessages:
         print(msg)
 
-
 def main():
-    screenMessage("AWS transcrip")
+    screenMessage("AWS transcribe viewer")
 
-    inputDirectory = r'./input'
-    for inputFile in os.listdir(inputDirectory):
+    input = args.input
+    # TODO: allow only one file as input or a dir for a batch
+    # TODO: move file logic to a file management module
+    for inputFile in os.listdir(input):
         if inputFile.endswith(".json"):
-            parser = TranscriptParser(f'{inputDirectory}/{inputFile}')
+            parser = TranscriptParser(f'{input}/{inputFile}')
             screenMessage(f"Path in parser: {parser.getJsonPath()}")
             data = parser.parse()
             screenMessage(f"AWS account: {data['accountId']}")
             screenMessage(f"JobName: {data['jobName']}")
             htmlFormatter = HtmlFormatter(data)
             # TODO: pass format options
-            html = htmlFormatter.format()
-            # TODO: add parameter for printing it
-            #    print(html)
-            # TODO: create module for file management
-            # TODO: create dir if not exist
-            outputFile = f"./output/{data['jobName']}.html"
+            output = htmlFormatter.format()
+            if args.print_output:
+                print(htmoutputl)
+            # TODO: create module for file management            
+            Path(args.output).mkdir(parents=True, exist_ok=True)
+            outputFile = f"./{args.output}/{data['jobName']}.html"
+            screenMessage(f'Output file: {outputFile}')
             with open(outputFile, "w") as fh:
-                fh.write(html)
+                fh.write(output)
             if openInBrowser:
                 webbrowser.open('file://' + os.path.realpath(outputFile))
         else:

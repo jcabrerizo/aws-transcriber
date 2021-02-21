@@ -2,7 +2,7 @@ import logging
 import webbrowser
 import os
 from pathlib import Path
-from parser.parser import TranscriptParser
+from parser import TranscriptParser
 from formatter.htmlFormatter import HtmlFormatter
 from cli_parser import CliParser
 

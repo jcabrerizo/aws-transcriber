@@ -14,11 +14,11 @@ class CliParser:
                             )
         parser.add_argument("--input-encoding",
                             help="Source file encoding",
-                            default="UTF8"
+                            default="utf-8"
                             )
         parser.add_argument("--output-encoding",
                             help="Source file encoding",
-                            default="UTF8"
+                            default="utf-8"
                             )
 
         parser.add_argument("-f", "--formater",

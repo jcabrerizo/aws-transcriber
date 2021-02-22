@@ -25,30 +25,23 @@ def screenMessage(msg):
 def main():
     screenMessage("AWS transcribe viewer")
 
-    fm = FileManager(args.input, args.output)
-    for inputFile in fm.getFilesToProcess():
-        if inputFile.endswith(".json"):
-            parser = TranscriptParser(inputFile)
-            screenMessage(f"File to be parsed: {parser.getJsonPath()}")
-            model = parser.parse()
-            jobName = model['metadata']['jobName']
-            screenMessage(f"AWS account: {model['metadata']['accountId']}")
-            screenMessage(f"JobName: {jobName}")
-            # TODO: pass format options
-            htmlFormatter = HtmlFormatter(model)
-            output = htmlFormatter.format()
-            if args.print_output:
-                print(htmoutputl)
-            # TODO: create module using the file management
-            Path(args.output).mkdir(parents=True, exist_ok=True)
-            outputFile = f"./{args.output}/{jobName}.html"
-            screenMessage(f'Output file: {outputFile}')
-            with open(outputFile, "w") as fh:
-                fh.write(output)
-            if openInBrowser:
-                webbrowser.open('file://' + os.path.realpath(outputFile))
-        else:
-            continue
+    filemanager = FileManager(args.input, args.output)
+    for inputFile in filemanager.getFilesToProcess():
+        parser = TranscriptParser(inputFile, args.input_encoding)
+        screenMessage(f"File to be parsed: {parser.getJsonPath()}")
+        model = parser.parse()
+        jobName = model['metadata']['jobName']
+        screenMessage(f"AWS account: {model['metadata']['accountId']}")
+        screenMessage(f"JobName: {jobName}")
+        # TODO: create format factory and pass format options
+        htmlFormatter = HtmlFormatter(model)
+        output = htmlFormatter.format()
+        if args.print_output:
+            print(htmoutputl)
+        outputFile = filemanager.saveJob(jobName, output, args.output_encoding)
+        screenMessage(f'Output file: {outputFile}')
+        if openInBrowser:
+            webbrowser.open('file://' + os.path.realpath(outputFile))
 
 
 if __name__ == "__main__":

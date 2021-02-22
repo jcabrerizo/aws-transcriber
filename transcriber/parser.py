@@ -5,9 +5,10 @@ from datetime import datetime
 
 class TranscriptParser:
 
-    def __init__(self, path=None):
+    def __init__(self, path, encoding):
         logging.debug(f"Path: {path}")
         self.jsonPath = path
+        self.encoding = encoding
         now = datetime.utcnow()
         self.model = {
             "startTime": str(now)
@@ -18,7 +19,7 @@ class TranscriptParser:
 
     def parse(self):
         # TODO: definir parámetros para encoding
-        with open(self.jsonPath, encoding="utf-8") as json_file:
+        with open(self.jsonPath, encoding=self.encoding) as json_file:
             self.data = json.load(json_file)
         self._buildModel()
         self._buildMetadata()
@@ -58,8 +59,6 @@ class TranscriptParser:
         itemsRead = 0
         itemsCounter = 0
         itemsInSegmenRaw = self.data['results']['items'][itemCounter:]
-#        logging.debug(
-#             f"getting {itemsInSegment} starting in {itemCounter} contaings {len(itemsInSegmenRaw)}")
         while itemsCounter < itemsInSegment:
             item = itemsInSegmenRaw[itemsRead]
             symbols.append(self._buildEntry(item))
@@ -70,7 +69,6 @@ class TranscriptParser:
         # Adding next to the segment if it's punctuation
         if len(itemsInSegmenRaw) > itemsRead and itemsInSegmenRaw[itemsRead]['type'] == "punctuation":
             symbols.append(self._buildEntry(itemsInSegmenRaw[itemsRead]))
-#            logging.debug("Punctuation inserted as last item in segment")
             itemsRead += 1
         return symbols, itemsRead
 
